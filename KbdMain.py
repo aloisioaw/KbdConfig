@@ -14,6 +14,7 @@ class KbdMain:
 		builder.add_from_file(filename)
 		builder.connect_signals(self)
 		window = builder.get_object("wdwMain")
+		window.set_title("KbdConfig")
 		window.show_all()
 
 		self.prepareButtons(builder)
@@ -22,53 +23,40 @@ class KbdMain:
 		Gtk.main()
 
 	def prepareButtons(self, builder):
-		builder.get_object("rdbtnLeftOff").connect("clicked", self.leftColorClick, "Off")
-		builder.get_object("rdbtnLeftWhite").connect("clicked", self.leftColorClick, "White")
-		builder.get_object("rdbtnLeftGreen").connect("clicked", self.leftColorClick, "Green")
-		builder.get_object("rdbtnLeftRed").connect("clicked", self.leftColorClick, "Red")
-		builder.get_object("rdbtnLeftBlue").connect("clicked", self.leftColorClick, "Blue")
-		builder.get_object("rdbtnLeftYellow").connect("clicked", self.leftColorClick, "Yellow")
-		builder.get_object("rdbtnLeftPurple").connect("clicked", self.leftColorClick, "Purple")
-		builder.get_object("rdbtnLeftAqua").connect("clicked", self.leftColorClick, "Aqua")
+		builder.get_object("rdbtnLeftOff").connect("clicked", self.colorClick, "Off", "left")
+		builder.get_object("rdbtnLeftWhite").connect("clicked", self.colorClick, "White", "left")
+		builder.get_object("rdbtnLeftGreen").connect("clicked", self.colorClick, "Green", "left")
+		builder.get_object("rdbtnLeftRed").connect("clicked", self.colorClick, "Red", "left")
+		builder.get_object("rdbtnLeftBlue").connect("clicked", self.colorClick, "Blue", "left")
+		builder.get_object("rdbtnLeftYellow").connect("clicked", self.colorClick, "Yellow", "left")
+		builder.get_object("rdbtnLeftPurple").connect("clicked", self.colorClick, "Purple", "left")
+		builder.get_object("rdbtnLeftAqua").connect("clicked", self.colorClick, "Aqua", "left")
 
-		builder.get_object("rdbtnMiddleOff").connect("clicked", self.middleColorClick, "Off")
-		builder.get_object("rdbtnMiddleWhite").connect("clicked", self.middleColorClick, "White")
-		builder.get_object("rdbtnMiddleGreen").connect("clicked", self.middleColorClick, "Green")
-		builder.get_object("rdbtnMiddleRed").connect("clicked", self.middleColorClick, "Red")
-		builder.get_object("rdbtnMiddleBlue").connect("clicked", self.middleColorClick, "Blue")
-		builder.get_object("rdbtnMiddleYellow").connect("clicked", self.middleColorClick, "Yellow")
-		builder.get_object("rdbtnMiddlePurple").connect("clicked", self.middleColorClick, "Purple")
-		builder.get_object("rdbtnMiddleAqua").connect("clicked", self.middleColorClick, "Aqua")
+		builder.get_object("rdbtnMiddleOff").connect("clicked", self.colorClick, "Off", "middle")
+		builder.get_object("rdbtnMiddleWhite").connect("clicked", self.colorClick, "White", "middle")
+		builder.get_object("rdbtnMiddleGreen").connect("clicked", self.colorClick, "Green", "middle")
+		builder.get_object("rdbtnMiddleRed").connect("clicked", self.colorClick, "Red", "middle")
+		builder.get_object("rdbtnMiddleBlue").connect("clicked", self.colorClick, "Blue", "middle")
+		builder.get_object("rdbtnMiddleYellow").connect("clicked", self.colorClick, "Yellow", "middle")
+		builder.get_object("rdbtnMiddlePurple").connect("clicked", self.colorClick, "Purple", "middle")
+		builder.get_object("rdbtnMiddleAqua").connect("clicked", self.colorClick, "Aqua", "middle")
 
-		builder.get_object("rdbtnRightOff").connect("clicked", self.rightColorClick, "Off")
-		builder.get_object("rdbtnRightWhite").connect("clicked", self.rightColorClick, "White")
-		builder.get_object("rdbtnRightGreen").connect("clicked", self.rightColorClick, "Green")
-		builder.get_object("rdbtnRightRed").connect("clicked", self.rightColorClick, "Red")
-		builder.get_object("rdbtnRightBlue").connect("clicked", self.rightColorClick, "Blue")
-		builder.get_object("rdbtnRightYellow").connect("clicked", self.rightColorClick, "Yellow")
-		builder.get_object("rdbtnRightPurple").connect("clicked", self.rightColorClick, "Purple")
-		builder.get_object("rdbtnRightAqua").connect("clicked", self.rightColorClick, "Aqua")
+		builder.get_object("rdbtnRightOff").connect("clicked", self.colorClick, "Off", "right")
+		builder.get_object("rdbtnRightWhite").connect("clicked", self.colorClick, "White", "right")
+		builder.get_object("rdbtnRightGreen").connect("clicked", self.colorClick, "Green", "right")
+		builder.get_object("rdbtnRightRed").connect("clicked", self.colorClick, "Red", "right")
+		builder.get_object("rdbtnRightBlue").connect("clicked", self.colorClick, "Blue", "right")
+		builder.get_object("rdbtnRightYellow").connect("clicked", self.colorClick, "Yellow", "right")
+		builder.get_object("rdbtnRightPurple").connect("clicked", self.colorClick, "Purple", "right")
+		builder.get_object("rdbtnRightAqua").connect("clicked", self.colorClick, "Aqua", "right")
 
 
-	def leftColorClick(self, widget, value):
+	def colorClick(self, widget, value, position):
 		if widget.get_active():
 			code = self.convertColorNameToCode(value)
-			self.changeKeyboardColor(code, "left")
-
-	def middleColorClick(self, widget, value):
-		if widget.get_active():
-			code = self.convertColorNameToCode(value)
-			self.changeKeyboardColor(code, "middle")
-
-	def rightColorClick(self, widget, value):
-		if widget.get_active():
-			code = self.convertColorNameToCode(value)
-			self.changeKeyboardColor(code, "right")
+			self.changeKeyboardColor(code, position)
 
 	def changeKeyboardColor(self, code, position):
-		print "echo " + code + " > /sys/devices/platform/clevo_wmi/kbled/" + position
-		print ""
-		print ""
 		subprocess.call("echo " + code + " > /sys/devices/platform/clevo_wmi/kbled/" + position, shell=True)
 
 	def convertColorNameToCode(self, colorName):
