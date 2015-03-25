@@ -5,6 +5,7 @@ import pygtk
 import subprocess
 
 from gi.repository import Gtk
+from KbdConstants import KbdConstants
 
 class KbdMain:
 
@@ -23,33 +24,13 @@ class KbdMain:
 		Gtk.main()
 
 	def prepareButtons(self, builder):
-		builder.get_object("rdbtnLeftOff").connect("clicked", self.colorClick, "Off", "left")
-		builder.get_object("rdbtnLeftWhite").connect("clicked", self.colorClick, "White", "left")
-		builder.get_object("rdbtnLeftGreen").connect("clicked", self.colorClick, "Green", "left")
-		builder.get_object("rdbtnLeftRed").connect("clicked", self.colorClick, "Red", "left")
-		builder.get_object("rdbtnLeftBlue").connect("clicked", self.colorClick, "Blue", "left")
-		builder.get_object("rdbtnLeftYellow").connect("clicked", self.colorClick, "Yellow", "left")
-		builder.get_object("rdbtnLeftPurple").connect("clicked", self.colorClick, "Purple", "left")
-		builder.get_object("rdbtnLeftAqua").connect("clicked", self.colorClick, "Aqua", "left")
+		self.attachClickColorChange(builder, "Left")
+		self.attachClickColorChange(builder, "Middle")
+		self.attachClickColorChange(builder, "Right")
 
-		builder.get_object("rdbtnMiddleOff").connect("clicked", self.colorClick, "Off", "middle")
-		builder.get_object("rdbtnMiddleWhite").connect("clicked", self.colorClick, "White", "middle")
-		builder.get_object("rdbtnMiddleGreen").connect("clicked", self.colorClick, "Green", "middle")
-		builder.get_object("rdbtnMiddleRed").connect("clicked", self.colorClick, "Red", "middle")
-		builder.get_object("rdbtnMiddleBlue").connect("clicked", self.colorClick, "Blue", "middle")
-		builder.get_object("rdbtnMiddleYellow").connect("clicked", self.colorClick, "Yellow", "middle")
-		builder.get_object("rdbtnMiddlePurple").connect("clicked", self.colorClick, "Purple", "middle")
-		builder.get_object("rdbtnMiddleAqua").connect("clicked", self.colorClick, "Aqua", "middle")
-
-		builder.get_object("rdbtnRightOff").connect("clicked", self.colorClick, "Off", "right")
-		builder.get_object("rdbtnRightWhite").connect("clicked", self.colorClick, "White", "right")
-		builder.get_object("rdbtnRightGreen").connect("clicked", self.colorClick, "Green", "right")
-		builder.get_object("rdbtnRightRed").connect("clicked", self.colorClick, "Red", "right")
-		builder.get_object("rdbtnRightBlue").connect("clicked", self.colorClick, "Blue", "right")
-		builder.get_object("rdbtnRightYellow").connect("clicked", self.colorClick, "Yellow", "right")
-		builder.get_object("rdbtnRightPurple").connect("clicked", self.colorClick, "Purple", "right")
-		builder.get_object("rdbtnRightAqua").connect("clicked", self.colorClick, "Aqua", "right")
-
+	def attachClickColorChange(self, builder, position):
+		for color in KbdConstants.COLORS:
+			builder.get_object("rdbtn" + position + color).connect("clicked", self.colorClick, color, position.lower())
 
 	def colorClick(self, widget, value, position):
 		if widget.get_active():
