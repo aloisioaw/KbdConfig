@@ -3,13 +3,14 @@
 import sys
 import pygtk
 import subprocess
+import ConfigParser
 
 from gi.repository import Gtk
 from KbdConstants import KbdConstants
 
 class KbdMain:
 
-	def __init__(self):
+	def __init__(self, senha):
 		filename = "KbdConfig.glade"
 		builder = Gtk.Builder()
 		builder.add_from_file(filename)
@@ -38,7 +39,9 @@ class KbdMain:
 			self.changeKeyboardColor(code, position)
 
 	def changeKeyboardColor(self, code, position):
-		subprocess.call("echo " + code + " > /sys/devices/platform/clevo_wmi/kbled/" + position, shell=True)
+		subprocess.call("sudo su -c 'echo " + code + " > /sys/devices/platform/clevo_wmi/kbled/" + position + "'", shell=True)
+		self.set_config("colors", position, code)
+
 
 	def convertColorNameToCode(self, colorName):
 		if colorName == "Off":
@@ -64,3 +67,10 @@ class KbdMain:
 
 		if colorName == "Aqua":
 			return "101"
+
+	def set_config(self, section, name, value):
+		config = ConfigParser.ConfigParser()
+		config.readfp(open("kbd.cfg"))
+		config.set(section, name, value)
+		with open("kbd.cfg", "w") as configfile:
+			config.write(configfile)
